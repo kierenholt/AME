@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="AME_addin.View.SeatsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AME_base;assembly=AME_base"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <!--DATACONTEXT TOP-->
+    <UserControl.Resources>
+        <local:AddressListsObservableCollection x:Key="addressLists" />
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        
+    <!--ALL SeatGroupS DOCKPANEL-->
+        <DockPanel Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                   DataContext="{Binding Seats}">
+            <TextBlock DockPanel.Dock="Top" >Seats</TextBlock>
+            <Button DockPanel.Dock="Bottom" Command="{Binding delete}" CommandParameter="{Binding /}">delete</Button>
+            
+            <ListView ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True"  >
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Name">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding name}"></TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Email">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding email}"></TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </DockPanel>
+    <!--END OF ALL SeatGroupS DOCKPANEL-->
+
+
+        <Button Grid.Column="1"  CommandParameter="{Binding Source={StaticResource addressLists},Path=/selectedSeat}" 
+                Command="{Binding Path=Seats.add}" 
+                >
+            &lt;&lt; ADD Seat &lt;&lt;</Button>
+        
+        <!--FOR GROUPS, ADD SeatGROUP
+            FOR INDIVIDUALS, ADD TEACHER OR ADD Seat
+        -->
+
+    <DockPanel Grid.Column="2"  DataContext="{Binding Source={StaticResource addressLists}}" >
+
+            <!--ADDRESS LISTS-->
+            <ComboBox  DockPanel.Dock="Top"  ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="Name" />
+            <!--END Of ADDRESS LISTS DOCKPANEL-->
+
+            <!--ENTRIES-->
+            <DockPanel DataContext="{Binding /}">
+                <StackPanel DockPanel.Dock="Top"   Orientation="Horizontal" >
+                    <Label>Filter</Label>
+                    <TextBox Margin="10"
+                        Text="{Binding nameFilter, UpdateSourceTrigger=PropertyChanged}"
+                        Width="150"/>
+                    <Label>Only Groups</Label>
+                    <CheckBox IsChecked="{Binding showOnlyGroupsFilter, FallbackValue=False, Mode=OneWayToSource}" />
+                </StackPanel>
+
+        
+                <ListBox ItemsSource="{Binding entries}" DisplayMemberPath="Name" 
+                     IsSynchronizedWithCurrentItem="True" />
+            </DockPanel>
+            <!--END OF ENTRIES-->    
+    </DockPanel>
+
+    </Grid>
+</UserControl>

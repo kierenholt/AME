@@ -1,0 +1,86 @@
+﻿<Window x:Class="AME_addin.MarkBookWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ViewModel="clr-namespace:AME_addin"
+             xmlns:View="clr-namespace:AME_addin.View"
+             xmlns:Addin="clr-namespace:AME_addin"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+        x:Name="markBookWindow">
+
+    <!--DATACONTEXT TOPVIEWMODEL-->
+    
+    <ScrollViewer>
+        <DockPanel>
+            <ToolBarTray DockPanel.Dock="Bottom" >
+                <ToolBar>
+                    <Button Command="{Binding Path=saveChanges}" Content="Save" />
+                </ToolBar>
+            </ToolBarTray>
+
+            <StackPanel Grid.Column="0" Orientation="Vertical">
+
+                <!--START OF GROUPS VIEW-->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock> Classes</TextBlock>
+                    <ComboBox ItemsSource="{Binding Path=teachingGroups}" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="name">
+                    </ComboBox>
+                </StackPanel>
+                <!--END OF GROUPS VIEW-->
+
+                <!--START OF SEND PROGRESS UPDATE BUTTON-->
+                <Button Command="{Binding Path=outlookTeacher.TCSs/emailProgress}" >Email progress to selected Seats</Button>
+                
+                <!--GRID DATA FORMAT e.g. DEADLINES VS MARKS-->
+                <ListBox ItemsSource="{Binding Path=teachingGroups/grids}" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="name"/>
+
+                <DockPanel>
+                    <!--BOOK USERCONTROL-->
+                    <View:Book DataContext="{Binding Path=teachingGroups/grids/}"></View:Book>
+
+                    <Expander DockPanel.Dock="Right" ExpandDirection="Left">
+                        <StackPanel Orientation="Vertical">
+                            <!--THRESHOLDS-->
+                            <!-- DATACONTEXT IS THRESHOLDSCOLLECTIOVIEWMODEL-->
+                            
+                            <!--<Expander ExpandDirection="Down" Header="Thresholds">
+
+                                <StackPanel Orientation="Vertical" >
+                                    <TextBlock>Thresholds</TextBlock>
+                                    <DataGrid x:Name="datagrid" ItemsSource="{Binding Path=teachingGroups/thresholds}" 
+                                              AutoGenerateColumns="False" AlternatingRowBackground="SlateGray"
+                                                CanUserAddRows="false" IsSynchronizedWithCurrentItem="True">
+
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn  Width="*" Header="Number" Binding="{Binding number}"></DataGridTextColumn>
+                                            <DataGridTextColumn Width="*" Header="Grade" Binding="{Binding gradeLetterOrNumber}">
+                                                <DataGridTextColumn.EditingElementStyle>
+                                                    <Style TargetType="{x:Type TextBox}">
+                                                        <Setter Property="MaxLength" Value="1"/>
+                                                    </Style>
+                                                </DataGridTextColumn.EditingElementStyle>
+                                            </DataGridTextColumn>
+                                            <DataGridTextColumn Width="*" Header="Description" Binding="{Binding description}"></DataGridTextColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid >
+
+                                    <CheckBox IsChecked="{Binding Path=teachingGroups/thresholdsAreAbsolute}">Use absolute grade boundaries</CheckBox>
+                                    <Button Command="{Binding Path=teachingGroups/thresholds.create}">create</Button>
+                                    <Button CommandParameter="{Binding ElementName=datagrid, Path=SelectedItem}" 
+                                            Command="{Binding Path=oteachingGroups/thresholds.delete}">delete</Button>
+
+                                </StackPanel>
+                            </Expander>-->
+                
+                        </StackPanel>
+                    </Expander>
+
+                </DockPanel>
+
+            </StackPanel>
+        </DockPanel>
+    </ScrollViewer>
+
+</Window>

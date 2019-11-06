@@ -1,0 +1,157 @@
+﻿<UserControl x:Class="AME_addin.View.DetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:ViewModel="clr-namespace:AME_base;assembly=AME_base"
+            xmlns:View="clr-namespace:AME_addin.View" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    <!--DATACONTEXT ANYTHING!-->
+    
+        <ContentControl Content="{Binding}">
+            <ContentControl.Resources>
+                
+                
+                <!--<DataTemplate DataType="{x:Type ViewModel:AssignmentViewModel}">
+                    <GroupBox Header="Assignment">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock>NAME:</TextBlock>
+                            <TextBox Text="{Binding name}" />
+                        </StackPanel>
+                    </GroupBox>
+                </DataTemplate>-->
+
+                <!--<DataTemplate DataType="{x:Type ViewModel:AttemptViewModel}">
+                    <GroupBox Header="Attempt">
+                        <StackPanel Orientation="Vertical" >
+                            
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>PDF score</TextBlock>
+                                <TextBox Text="{Binding pdfScore, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Handed in</TextBlock>
+                                <TextBlock Text="{Binding whenHandedIn}" />
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Days Late</TextBlock>
+                                <TextBox Text="{Binding daysLate}" />
+                            </StackPanel>
+                            
+                        </StackPanel>
+
+                    </GroupBox>
+                </DataTemplate>-->
+
+
+
+            <DataTemplate DataType="{x:Type ViewModel:GroupViewModel}">
+                <GroupBox Header="Lesson">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>NAME:</TextBlock>
+                        <TextBox Text="{Binding name}" />
+                    </StackPanel>
+                </GroupBox>
+            </DataTemplate>
+
+            
+                <DataTemplate DataType="{x:Type ViewModel:MarkViewModel}">
+                    <GroupBox Header="Completion">
+                    <View:MarkView DataContext="{Binding Path='', UpdateSourceTrigger=PropertyChanged}" />
+                    </GroupBox>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type ViewModel:OutcomeViewModel}">
+                        <GroupBox Header="Skill Area">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Description</TextBlock>
+                                <TextBox Text="{Binding description}" />
+                            </StackPanel>
+                        </GroupBox>
+                </DataTemplate>
+                
+                <DataTemplate DataType="{x:Type ViewModel:QuestionViewModel}">
+                <GroupBox Header="Question">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock > Out of</TextBlock>
+                            <TextBlock Text="{Binding OutOfAll}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <!--RESPONSE SUMMARIES ONE FOR EACH RESPONSEELEMENT -->
+                            <ListView ItemsSource="{Binding responseSummaries}">
+                                <ListView.View>
+                                    <GridView>
+                                        <!--QUESTIONNUMBER-->
+                                        <GridViewColumn Header="Sub Q's">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate DataType=" ">
+                                                    <!--RESPONSE SUMMARYITEM ONE FOR EACH UNIQUE RESPONSE -->
+                                                    <ListView ItemsSource="{Binding}">
+                                                        <ListView.View>
+                                                            <GridView>
+                                                                <!--QUESTIONNUMBER-->
+                                                                <GridViewColumn Header="response" DisplayMemberBinding="{Binding text}" />
+                                                                <GridViewColumn Header="count" DisplayMemberBinding="{Binding totalWithSameText}" />
+                                                                <GridViewColumn Header="% count" DisplayMemberBinding="{Binding percentWithSameText}" />
+                                                            </GridView>
+                                                        </ListView.View>
+                                                    </ListView>
+                                                    <!--END OF RESPONSE SUMMARYITEM ONE FOR EACH UNIQUE RESPONSE -->
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <!--END OF RESPONSE SUMMARIES ONE FOR EACH RESPONSEELEMENT -->
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+            </DataTemplate>
+
+                <DataTemplate DataType="{x:Type ViewModel:ResponseViewModel}">
+                    <GroupBox Header="Question response">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Score</TextBlock>
+                                <TextBox Text="{Binding score, Mode=OneWay}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                </DataTemplate>
+
+                
+
+                
+                <DataTemplate DataType="{x:Type ViewModel:SeatViewModel}">
+                        <GroupBox Header="Seat">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>First Name: </TextBlock>
+                                <TextBox Text="{Binding firstName}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Last Name: </TextBlock>
+                                <TextBox Text="{Binding lastName}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Email: </TextBlock>
+                                <TextBox Text="{Binding email, Mode=OneWay}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Alternate Email:</TextBlock>
+                                <TextBox Text="{Binding alternateEmail}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    </DataTemplate>
+
+
+            </ContentControl.Resources>
+        </ContentControl>
+</UserControl>

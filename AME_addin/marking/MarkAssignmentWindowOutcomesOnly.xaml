@@ -1,0 +1,207 @@
+﻿<Window x:Class="AME_addin.MarkAssignmentWindowOutcomesOnly"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:ViewModel="clr-namespace:AME_addin"
+            xmlns:View="clr-namespace:AME_addin.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+        x:Name="MarkAssignmentWindow">
+
+
+        <DockPanel>
+
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button  Command="{StaticResource OKButton}" >
+                    OK
+                </Button>
+                <Button  Command="{StaticResource CancelButton}" >
+                    Cancel
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+            
+        <!--DATACONTEXT = PDFASSIGNMENTVIEWMODEL-->
+        <DockPanel>
+            <!--START OF NAVIGATION OF QUESTION NUMBERS-->
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel DockPanel.Dock="Left" Orientation="Vertical" Height="Auto" >
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock >
+                <Run Text="{Binding scoreAll, Mode=OneWay}" />
+                / 
+                <Run Text="{Binding outOfAll, Mode=OneWay}" />
+                    </TextBlock>
+                </StackPanel>
+                    <ListView ItemsSource="{Binding questions}" IsSynchronizedWithCurrentItem="True" Height="Auto">
+                    
+                        <ListView.View>
+                        <GridView>
+                            <!--QUESTIONNUMBER-->
+                            <GridViewColumn Width="100" Header="#" DisplayMemberBinding="{Binding questionNumberFullString}" />
+                            <!--SCORE-->
+                            <GridViewColumn Header="Score"  DisplayMemberBinding="{Binding scoreAll}" />
+                            <!--START OF QUESTIONELEMENTS COLUMN-->
+                            <GridViewColumn Header="Sub Q's">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate DataType=" ">
+                                        <!--START OF QUESTIONELEMENTS LISTVIEW-->
+                                            <ListView ItemsSource="{Binding markingQuestionElements}">
+                                            <ListView.View>
+                                                <GridView>
+                                                    <!--QUESTIONNUMBER-->
+                                                    <GridViewColumn Header="#" DisplayMemberBinding="{Binding questionLetter}" />
+                                                    <!--QUESTIONELEMENT SCORES-->
+                                                    <GridViewColumn Header="Score">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <ListView SelectionMode="Single" ItemsSource="{Binding Path=possibleScores}" 
+                                                                    SelectedIndex="{Binding Path=score, Mode=TwoWay}"
+                                                                    IsSynchronizedWithCurrentItem="False" BorderThickness="0" VerticalContentAlignment="Stretch" 
+                                                                          HorizontalContentAlignment="Stretch">
+                                                                
+                                                                    <ListView.Resources>
+                                                                        <Style TargetType="GridViewColumnHeader">
+                                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                                        </Style>
+                                                                    </ListView.Resources>
+                                                                
+                                                                    <ListView.View>
+                                                                        <GridView>
+                                                                            <GridViewColumn>
+                                                                                <GridViewColumn.CellTemplate>
+                                                                                    <DataTemplate>
+                                                                                        <TextBlock Width="20" HorizontalAlignment="Center" Text="{Binding value}" >
+                                                                                            <TextBlock.Style>
+                                                                                                <Style TargetType="{x:Type TextBlock}">
+                                                                                                    <Style.Triggers>
+                                                                                                        <DataTrigger
+                                                                                                            Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                                                                                            Value="True">
+                                                                                                            <Setter Property="Background" Value="{Binding Path=color, Mode=OneWay}" />
+                                                                                                        </DataTrigger>
+                                                                                                    </Style.Triggers>
+                                                                                                </Style>
+                                                                                            </TextBlock.Style>
+                                                                                        </TextBlock>
+                                                                                    </DataTemplate>
+                                                                                </GridViewColumn.CellTemplate>
+                                                                            </GridViewColumn>
+                                                                        </GridView>
+                                                                    </ListView.View>
+
+                                                                    <ListView.ItemsPanel>
+                                                                        <ItemsPanelTemplate>
+                                                                                <StackPanel Orientation="Horizontal" 
+                                                                                    VerticalAlignment="Center"
+                                                                                    HorizontalAlignment="Center"></StackPanel>
+                                                                        </ItemsPanelTemplate>
+                                                                    </ListView.ItemsPanel>
+
+                                                                    <ListView.ItemContainerStyle>
+                                                                        <Style TargetType="ListViewItem">
+                                                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                                            <Setter Property="Padding" Value="0"/>
+                                                                            <Setter Property="Margin" Value="-6 0 -6 0"/>
+                                                                            <Setter Property="BorderThickness" Value="0"/>
+                                                                        </Style>
+                                                                    </ListView.ItemContainerStyle>
+                                                                
+                                                                </ListView>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                        <!--END OF QUESTIONELEMENTS LISTVIEW-->
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <!--END OF QUESTIONELEMENTS COLUMN-->
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                </StackPanel >
+            </ScrollViewer>
+            <!--END OF QUESTION NUMBERS-->
+            
+            <DockPanel>
+
+            <!--START OF OUTCOMES  datacontext = outcome-->
+            <GroupBox DockPanel.Dock="Bottom" Header="Skill Areas">
+                    <ListView ItemsSource="{Binding Path=distinctOutcomes, Mode=OneWay}">
+                        <ListView.View>
+                            <GridView>
+                                <!-- DESCRIPTION -->
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=description}" IsEnabled="{Binding Path=isEnabled}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <!-- LEVEL INDEX-->
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ListBox ItemsSource="{Binding completionNames}" 
+                                             SelectedIndex="{Binding completionIndex}" 
+                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="200"
+                                                      IsEnabled="{Binding Path=isEnabled}">
+                                                <ListBox.Style>
+                                                    <Style TargetType="ListBox">
+                                                        <Setter Property="ItemsPanel">
+                                                            <Setter.Value>
+                                                                <ItemsPanelTemplate>
+                                                                    <StackPanel Orientation="Horizontal"
+                                                                        VerticalAlignment="Center"
+                                                                        HorizontalAlignment="Center"/>
+                                                                </ItemsPanelTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </ListBox.Style>
+                                            </ListBox>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <!-- DESCRIPTION -->
+                            <GridViewColumn Header="score">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Path=scoreAll}" />
+                                            <TextBlock >/</TextBlock>
+                                        <TextBlock Text="{Binding Path=outOfAll}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <!-- FEEDBACK-->
+                                    <!--<GridViewColumn Width="150">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Width="150" Text="{Binding Path=feedback, UpdateSourceTrigger=PropertyChanged}" 
+                                             TextWrapping="Wrap" AcceptsReturn="True" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>-->
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+            </GroupBox>
+            <!--END OF OUTCOMES-->
+            
+                <!--HTML PREVIEW-->
+                <GroupBox Header="Question Content">
+                    <WebBrowser ViewModel:BrowserBehavior.Html="{Binding Path=questions/HTMLPreview}" />
+                </GroupBox>
+            </DockPanel>
+        </DockPanel>
+
+    </DockPanel>
+</Window>

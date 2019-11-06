@@ -1,0 +1,61 @@
+﻿<Window x:Class="AME_addin.UserSettingsWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:ViewModel="clr-namespace:AME_addin"
+             xmlns:View="clr-namespace:AME_addin.View"
+             xmlns:Addin="clr-namespace:AME_addin"
+             d:DesignHeight="300" d:DesignWidth="300"
+        x:Name="userSettingsWindow">
+    
+    <Window.DataContext>
+        <ViewModel:SettingsViewModel/>
+    </Window.DataContext>
+
+
+    <ScrollViewer>
+        <DockPanel>
+
+            <ToolBarTray DockPanel.Dock="Bottom" >
+                <ToolBar>
+                    <Button  Command="{StaticResource CancelButton}" CommandParameter="{Binding ElementName=userSettingsWindow}" >
+                        Cancel
+                    </Button>
+                    <Button  Command="{StaticResource OKButton}" CommandParameter="{Binding ElementName=userSettingsWindow}" >
+                        OK
+                    </Button>
+                </ToolBar>
+            </ToolBarTray>
+
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" Height="30" Margin="30">
+                    <CheckBox IsChecked="{Binding InteruptMarkingBelowPercentEnabled}" >If this box is checked, automatic marking will be interupted if the total calculated score falls below
+                    </CheckBox>
+                    <TextBox Text="{Binding InteruptMarkingBelowPercentValue}"></TextBox>
+                    <TextBlock>%</TextBlock>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Assignments are expected in</TextBlock>
+                    <TextBox Text="{Binding DaysFromHandedOutToExpectedIn}"></TextBox>
+                    <TextBlock>days after the email is sent out</TextBlock>
+                </StackPanel>
+                
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Skill areas are described as follows (worst first):</TextBlock>
+                    <DataGrid x:Name="datagrid" ItemsSource="{Binding skillCompletionNames}" 
+                              AutoGenerateColumns="False" CanUserAddRows="false">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn  Width="200" Header="Description" Binding="{Binding str}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid >
+                </StackPanel>
+                
+                
+            </StackPanel>
+        </DockPanel>
+    </ScrollViewer>
+</Window>

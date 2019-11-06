@@ -1,0 +1,158 @@
+﻿change tracking proxies - best to ignore change tracking - use ienumerable for covariant navigation properties
+griddata is updated whenever marks are added, hence viewmodel is updated
+
+EF needs icollection
+interfaces need ilist to make new collections from
+https://blog.oneunicorn.com/2011/12/05/should-you-use-entity-framework-change-tracking-proxies/
+
+resource file build options 
+http://stackoverflow.com/questions/145752/what-are-the-various-build-action-settings-in-vs-net-project-properties-and-wh
+
+use attached proprertes to manage permissions
+http://www.codeproject.com/Tips/692265/WPF-Custom-Attached-Property
+
+unable to bind to visibility on datagrid
+http://stackoverflow.com/questions/7660967/wpf-error-cannot-find-govering-frameworkelement-for-target-element
+
+ui
+https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6-Beta/html-single/Identity_Management_Guide/images/user-list.png
+***ribbon buttons*** - markbook, question bank, set work, mark work, config
+
+outlook form regions
+custom actions https://msdn.microsoft.com/en-us/library/bb386185.aspx
+access the item displaying the form region https://msdn.microsoft.com/en-gb/library/vstudio/bb608615(v=vs.100).aspx
+
+list of variant types
+http://msdn.microsoft.com/en-us/library/dd799517.aspx
+example: http://msdn.microsoft.com/en-us/library/dd465120.aspx
+IEnumerable - type parameter is covariant so can be assigned to derived types
+
+reusable views 
+http://stackoverflow.com/questions/20663054/wpf-reusable-window-model-template
+
+content control and datatemplate with mvvm
+http://www.japf.fr/2009/03/thinking-with-mvvm-data-templates-contentcontrol/
+http://rachel53461.wordpress.com/2011/05/28/switching-between-viewsusercontrols-using-mvvm/
+
+multiple command parameters
+http://dariosantarelli.wordpress.com/2010/11/07/wpf-binding-multiple-command-parameters-using-multibinding/
+
+things that didnt work
+- using frame to change page layouts. Bindings do not inherit.
+- using usercontrol for editable text box. triggers were much cleaner and no codebehind.
+- using contentcontrol for frame type behaviour / change page layouts. too much faffing with resourcedictionary.
+
+FILTERING
+context properties					vs  constructor arguments
+e.g. 
+inboxSeat						vs  userteacher
+navigating up							navigating down the hierarchy
+entities need searching anyway			don't need to search whole db	
+accessible through search               accessible through single known entity
+
+AUTOMATICALLY SETTED CHECKBOXES
+not needed:
+                <CheckBox.Style>
+                    <Style TargetType="{x:Type CheckBox}">
+                        <Setter Property="IsChecked" Value="True"/>
+                        <Setter Property="IsEnabled" Value="False"/>
+                    </Style>
+                </CheckBox.Style>
+
+
+UI - managing collections
+Add member THEN Edit
++ Updates existing items
++ can be used over and over
+
+Edit member THEN Add
+-	cannot be used to update existing items
+-	Single use then window needs reopening
+
+			SELECT NEW ASSIGNMENT
+			CANDIDATES TRIGGERS PROPERTYCHANGED(item)
+			DBQUESTIONS VIEW IS BOUND TO CADNIDATES[COURSEVIEWMODEL].DBQUESTIONS 
+			WHOLE NEW DBQUESTIONSVIEW
+
+			course -> course.dbquestions
+			candidate -> candidatehasthis
+
+
+			SELECT NEW AGGREGATEHEADERVIEWMODEL
+			ITEM PROPERTY IS UPDATED
+			SOMETHING NEEDS TO BE BOUND TO CANDIDATES[AGGREGATEHEADERVIEWMODEL]
+
+			deadline -> tcs.aggregates
+			candidatehasthis -> candidate
+
+
+
+
+INHERITED VIEWMODELS
+e.g. Viewmodels: alldeadlinesVM > assignmentVM
+	entities: deadlinesContainer > assignment
+		http://stackoverflow.com/questions/1399127/c-new-versus-override
+
+BASE CLASS VS interfaCE
+When we create an abstract class, we are creating a base class that might have one or more completed methods but at least one or more methods are left uncompleted and declared abstract. If all the methods of an abstract class are uncompleted then it is same as an interface.
+if all methods are uncompleted in base class, it is an interface
+
+
+COVARIaNCE EXAMPLE -- out
+http://www.codethinked.com/c-40-new-features-part-3-generic-covariance
+
+
+
+**TRUST**
+ 
+finding working directory:
+/Get the assembly information
+  System.Reflection.Assembly assemblyInfo = System.Reflection.Assembly.GetExecutingAssembly();
+                    
+  //Location is where the assembly is run from 
+  string assemblyLocation = assemblyInfo.Location;
+
+  //CodeBase is the location of the ClickOnce deployment files
+  Uri uriCodeBase = new Uri(assemblyInfo.CodeBase);
+  string ClickOnceLocation = Path.GetDirectoryName(uriCodeBase.LocalPath.ToString());
+  
+Add a data file (recommended):
+Using mage https://msdn.microsoft.com/en-us/library/6fehc36e.aspx
+Using VS https://msdn.microsoft.com/en-us/library/kzy0fky2.aspx
+PRIVATE DEPLOYMENT OF SQLCE http://stackoverflow.com/questions/10739845/how-to-deploy-sql-server-compact-edition-4-0
+
+CliCKONCE AND HIqPDF
+
+	CLICKONCE - "HiQPdf.dll' already exists."
+	VSTO - OK
+	reference  - copy local = true
+	other included files - content / do not copy
+
+	CLICKONCE - OK
+	VSTO - "Could not load file or assembly 'HiQPdf, Version=9.12.0.0, Culture=neutral, PublicKeyToken=acd8b62594985b24' or one of its dependencies. The system cannot find the file specified."
+	reference  - copy local = false
+	other included files - content / do not copy
+
+	ProJECT FILE EDITS 
+	
+		..in the references section
+
+			<Reference Include="HiQPdf, Version=9.12.0.0, Culture=neutral, PublicKeyToken=acd8b62594985b24, processorArchitecture=MSIL" Condition="'$(Configuration)' == 'Release'">
+			  <SpecificVersion>False</SpecificVersion>
+			  <HintPath>..\packages\hiqpdf.9.12\lib\net40\HiQPdf.dll</HintPath>
+			  <Private>False</Private>
+			</Reference>
+
+			<Reference Include="HiQPdf, Version=9.12.0.0, Culture=neutral, PublicKeyToken=acd8b62594985b24, processorArchitecture=MSIL" Condition="'$(Configuration)' == 'Debug'">
+			  <SpecificVersion>False</SpecificVersion>
+			  <HintPath>..\packages\hiqpdf.9.12\lib\net40\HiQPdf.dll</HintPath>
+			  <Private>True</Private>
+			</Reference>
+
+		...right at the end before the </project> tag
+
+
+		<!-- The following makes sure we don’t try to publish a configuration that defines the DEBUG constant -->
+		<Target Name="BeforePublish">
+			<Error Condition="'$(DebugSymbols)' == 'true'" Text="You attempted to publish a configuration that defines the DEBUG constant!" />
+		</Target>

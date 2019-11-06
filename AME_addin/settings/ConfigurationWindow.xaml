@@ -1,0 +1,83 @@
+﻿<Window x:Class="AME_addin.ConfigurationWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:ViewModel="clr-namespace:AME_addin"
+    xmlns:View="clr-namespace:AME_addin.View"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <Window.DataContext>
+        <ViewModel:TopViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <!--<DataTemplate x:Key="TeachersTemplate">
+            <View:TeachersView/>
+        </DataTemplate>
+        <DataTemplate x:Key="SeatsTemplate">
+            <View:SeatsView/>
+        </DataTemplate>
+        <DataTemplate x:Key="SeatGroupsTemplate">
+            <View:SeatGroupsView />
+        </DataTemplate>
+        <DataTemplate x:Key="TimetableTemplate">
+            <View:TimetableView/>
+        </DataTemplate>-->
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Vertical">
+            <ListBox x:Name="ListBoxMenu"                    
+                     Grid.Column="0" Margin="5"
+                     SelectedValue="{Binding selectedValue}">
+                <sys:String>Teachers</sys:String>
+                <sys:String>Seats</sys:String>
+                <sys:String>Classes</sys:String>
+                <sys:String>Timetable</sys:String>
+            </ListBox>
+        </StackPanel>
+        
+        <Border Grid.Column="1" Margin="5" BorderBrush="#FF7F9DB9" BorderThickness="1">
+            <DockPanel>
+                <ToolBarTray DockPanel.Dock="Bottom" >
+                    <ToolBar>
+                        <Button Command="{Binding Path=saveChanges}" Content="Save" />
+                    </ToolBar>
+                </ToolBarTray>
+
+                <ContentControl Content="{Binding}">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Setter Property="ContentTemplate" Value="{StaticResource TeachersTemplate}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=ListBoxMenu, Path=SelectedItem}" Value="Teachers">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource TeachersTemplate}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=ListBoxMenu, Path=SelectedItem}" Value="Seats">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource SeatsTemplate}" />
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=ListBoxMenu, Path=SelectedItem}" Value="Timetable">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource TimetableTemplate}" />
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=ListBoxMenu, Path=SelectedItem}" Value="Classes">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource SeatGroupsTemplate}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl> 
+            
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>
